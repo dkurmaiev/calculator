@@ -22,6 +22,9 @@ class Calculator extends Component {
       case '+/-':
         this.toggleSign();
         break;
+      case '%':
+        this.calculatePercentage();
+        break;
       default:
         this.addToExpression(value);
         break;
@@ -62,6 +65,16 @@ class Calculator extends Component {
     }
   }
 
+  calculatePercentage() {
+    const { expression } = this.state;
+    if (expression.length > 0 && expression !== 'Error') {
+      const result = (parseFloat(expression) / 100).toString();
+      this.setState({
+        expression: result,
+      });
+    }
+  }
+
   addToExpression(value) {
     this.setState((prevState) => ({
       expression: prevState.expression + value,
@@ -69,9 +82,12 @@ class Calculator extends Component {
   }
 
   render() {
+    const { expression } = this.state;
+    const displayValue = expression === '' ? '0' : expression;
+
     return (
       <div className="myCalculator">
-        <Result result={this.state.expression} />
+        <Result result={displayValue} />
         <Buttons handleButtonClick={this.handleButtonClick} />
       </div>
     );
